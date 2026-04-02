@@ -70,9 +70,9 @@ img {
   position: absolute;
   left: 50%;
   bottom: 6%;
-  transform: translateX(-50%);
   width: 46%;
   height: 11%;
+  margin-left: -23%;
   border: none;
   background: transparent;
   cursor: pointer;
@@ -87,8 +87,9 @@ img {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  /* justify-content: center;
-  align-items: flex-start; */
+  justify-content: center;
+  align-items: flex-start;
+  background: #efeeeb;
 }
 
 /* ======================
@@ -98,11 +99,10 @@ img {
 .main-card {
   width: 100%;
   max-width: 1700px;
-  padding: 8px 40px 40px;
+  padding: 43px 40px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  transform: translateY(35px);
 }
 
 /* ======================
@@ -112,8 +112,9 @@ img {
 .title {
   font-size: 68px;
   font-weight: 800;
-  margin-bottom: 40px;
+  margin: 0 0 40px;
   font-family: Georgia, serif;
+  text-align: center;
 }
 
 /* ======================
@@ -154,8 +155,8 @@ img {
   position: absolute;
   bottom: 20px;
   left: 50%;
-  transform: translateX(-50%);
   width: 90px;
+  margin-left: -45px;
   z-index: 10;
 }
 
@@ -191,59 +192,47 @@ img {
   width: 100%;
   height: 100%;
   object-fit: fill;
-  
 }
 
 .frame-overlay {
-  /* position: absolute; */
-  /* top: 50%;
-  left: 50%; */ 
-  height:  100%;
-  width: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: max-content;
+  height: 338px;
+  margin: auto;
   display: flex;
-  justify-content: flex-start; /* 자식들을 가로축 기준 중앙으로 */
-  align-items: center; 
-  gap: 10px;
-  transform: scale(0.8);
+  gap: 14px;
+  align-items: center;
 }
 
 .frame-item {
-  width: 300px;
-  height: 450px;
+  width: 225px;
+  height: 338px;
   object-fit: cover;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    margin 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .frame-item:hover {
-  transform: translateY(-10px) scale(1.05);
+  width: 236px;
+  height: 355px;
+  margin-top: -10px;
+  margin-bottom: -7px;
 }
 
 .frame-item.active {
-  transform: translateY(-30px) scale(1.2);
+  width: 270px;
+  height: 405px;
+  margin-top: -30px;
+  margin-bottom: -37px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-}
-/* 가로 스크롤 목록 영역 */
-
-
-.scroll-box {
-  overflow-x: auto; 
-  display: flex;
-  justify-content: flex-start; /* 스크롤 박스도 왼쪽 정렬 */
-  height: 120%; /* 원하는 높이 설정 */
-  align-items: center;
-  background-color: #e3e3e3;
-  padding: 0 60px; /* 좌우 패딩을 추가하여 첫 번째/마지막 프레임 확대 시 잘림 방지 */
-  gap: 30px; /* 프레임 사이의 간격을 넓혀 확대 시 겹침 방지 */
-}
-
-/* 스크롤바 디자인 (선택) */
-.mbti-list::-webkit-scrollbar {
-  width: 6px;
-}
-.mbti-list::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 10px;
 }
 
 /* ======================
@@ -304,9 +293,11 @@ img {
 
 .shoot-light {
   position: absolute;
-  top: 46%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
   pointer-events: none;
   object-fit: contain;
 }
@@ -325,21 +316,26 @@ img {
 
 .shoot-card-image {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 220px;
-  transform: translate(-50%, -50%) scale(1.8);
-  transform-origin: center center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 396px;
+  height: auto;
+  margin: auto;
   z-index: 3;
   object-fit: contain;
 }
 
 .countdown-image {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   width: 180px;
-  transform: translate(-50%, -50%);
+  height: auto;
+  margin: auto;
   z-index: 4;
 }
 
@@ -359,7 +355,8 @@ img {
   font-size: 42px;
   font-weight: 800;
   margin-bottom: 20px;
-  transform: translateX(-10px);
+  position: relative;
+  left: -10px;
 }
 
 .shutter-button-reset {
@@ -452,6 +449,11 @@ img {
   line-height: 1.25;
 }
 
+.qr-card-image-wrap {
+  display: flex;
+  justify-content: flex-start;
+}
+
 .qr-box-image {
   width: 145px;
 }
@@ -507,7 +509,9 @@ img {
   width: 95px;
   height: auto;
   flex-shrink: 0;
-  transform: translateX(200px) translateY(8px);
+  position: relative;
+  left: 200px;
+  top: 8px;
 }
 
 .decorate-frame-image {
@@ -515,7 +519,9 @@ img {
   height: auto;
   object-fit: contain;
   flex-shrink: 0;
-  transform: translateX(140px) translateY(10px);
+  position: relative;
+  left: 140px;
+  top: 10px;
   z-index: 2;
 }
 
@@ -684,6 +690,8 @@ img {
 
 .final-print-button {
   margin-top: 34px;
+  position: relative;
+  left: 120px;
   border: none;
   background: #666;
   color: #fff;
@@ -692,5 +700,4 @@ img {
   border-radius: 16px;
   cursor: pointer;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.22);
-  transform: translateX(120px);
 }
