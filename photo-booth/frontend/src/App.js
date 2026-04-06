@@ -75,12 +75,12 @@ function IntroPage({ onNext }) {
             className="intro-main-image"
           />
 
-          <button
+          {/* <button
             type="button"
             className="intro-start-hitbox"
             onClick={onNext}
             aria-label="시작하기"
-          />
+          /> */}
         </div>
       </div>
     </div>
