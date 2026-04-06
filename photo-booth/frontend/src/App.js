@@ -1,13 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
-
-import mainIntro from "./assets/main.png";
-
-import tutorialStrip from "./assets/tutorial_strip.png";
-import blackBar from "./assets/blackbar.png";
-import peopleIcon from "./assets/people_icon.png";
-
-import frameBg from "./assets/frame_bg.png";
+import { useState } from "react";
 
 import frame1 from "./assets/frame1.png";
 import frame2 from "./assets/frame2.png";
@@ -75,12 +67,12 @@ function IntroPage({ onNext }) {
             className="intro-main-image"
           />
 
-          {/* <button
+          <button
             type="button"
             className="intro-start-hitbox"
             onClick={onNext}
             aria-label="시작하기"
-          /> */}
+          />
         </div>
       </div>
     </div>

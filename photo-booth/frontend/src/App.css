@@ -60,10 +60,13 @@ img {
 }
 
 .intro-main-image {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   max-width: 1680px;
   height: auto;
-  display: block;
+  /* display: block; */
+  object-fit: fill;
+  background-image: url('../src/assets/main.png');
 }
 
 
