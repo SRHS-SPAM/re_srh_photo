@@ -178,67 +178,92 @@ img {
 /* ======================
    FRAME PAGE
 ====================== */
-
-.frame-page .title {
-  margin-bottom: 24px;
-}
-
 .frame-stage {
   position: relative;
   width: 100%;
-  max-width: 1480px;
-  height: 520px;
 }
 
 .frame-bg {
-  position: absolute;
-  inset: 0;
   width: 100%;
-  height: 100%;
-  object-fit: fill;
+  display: block;
+  /* display: flex;
+  align-items: center; */
 }
 
 .frame-overlay {
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
+  bottom: 5%;
   left: 0;
-  width: max-content;
-  height: 338px;
-  margin: auto;
+  width: 100%;
+  height: 120%;
+  box-sizing: border-box;
+  padding: 5% 2%;        /* 배경 어두운 박스 위치에 맞게 조절 */
   display: flex;
-  gap: 14px;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.scroll-box {
+ /* 1. 크기 고정: 부모 박스(회색 사각형) 안에 가두기 */
+  width: 100%;
+  height: 100%; 
+  box-sizing: border-box;
+  overflow-x: scroll;    /* auto 대신 scroll로 강제 */
+  /* overflow-y: hidden; */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start; /* center 대신 flex-start로 변경 (상단 정렬) */
+  /* justify-content: flex-start; */
+  gap: 20px;
+  padding-top: 20px;        /* 100px은 너무 과하니 20~40px 정도로 줄여보세요 */
+  padding-bottom: 25px;
+  box-sizing: border-box;
+  /* background-color: #111; */
+  
+
+  /* 스크롤바 항상 보이게 */
+  scrollbar-width: none;
+  scrollbar-color: rgba(0,0,0,0.25) transparent;
+}
+
+.scroll-box::-webkit-scrollbar {
+  height: 5px;
+}
+.scroll-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-box::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.25);
+  border-radius: 10px;
 }
 
 .frame-item {
-  width: 225px;
-  height: 338px;
-  object-fit: cover;
+  flex-shrink: 0;
+  height: 90%;          /* ← 크기 여기서 조절 */
+  width: auto;
+  /* border-radius: 10px; */
   cursor: pointer;
-  transition:
-    width 0.3s ease,
-    height 0.3s ease,
-    margin 0.3s ease,
-    box-shadow 0.3s ease;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+
+  /* border 완전 제거 */
+  border: none;
+  outline: none;
 }
 
 .frame-item:hover {
-  width: 236px;
-  height: 355px;
-  margin-top: -10px;
-  margin-bottom: -7px;
+  transform: scale(1.04);
 }
 
+/* active 선택 시 border 없이 살짝 올라오는 효과만 */
 .frame-item.active {
-  width: 270px;
-  height: 405px;
-  margin-top: -30px;
-  margin-bottom: -37px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  transform: scale(1.06) translateY(-4px);
 }
-
+/* active 선택 시 border 없이 살짝 올라오는 효과만 */
+.frame-item.active {
+  transform: scale(1.06) translateY(-4px);
+}
 /* ======================
    BUTTON
 ====================== */
@@ -246,7 +271,7 @@ img {
 .next-button {
   width: 720px;
   height: 92px;
-  border-radius: 20px;
+  border-radius: 20px;  
   background: #777;
   color: #fff;
   font-size: 34px;
@@ -475,11 +500,12 @@ img {
 ====================== */
 
 .decorate-page {
-  position: relative;
   width: 100%;
   min-height: 100vh;
   background: #efeeeb;
   overflow: hidden;
+  display: flex;
+  /* justify-content: flex-start;  <-- 필요없으면 삭제 */
 }
 
 .decorate-timer-image {
@@ -495,11 +521,15 @@ img {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 95px;
-  padding-left: 20px;
-  padding-right: 790px;
+  flex-direction: row;
+  
+  /* 중앙 정렬로 바꾸면 왼쪽 여백이 균형 잡힙니다 */
+  justify-content: center; 
+  align-items: center; 
+  
+  /* 과도한 패딩은 지우고 적당히 조절하세요 */
+  padding-right: 47%; /* 오른쪽 스티커 패널 공간만큼만 비워두기 */
+  gap: 40px; /* 버튼과 프레임 사이 간격 */
 }
 
 .decorate-next-button-reset {
@@ -513,9 +543,7 @@ img {
   width: 95px;
   height: auto;
   flex-shrink: 0;
-  position: relative;
-  left: 200px;
-  top: 8px;
+  /* left: 200px;  <-- 이거 삭제하세요! */
 }
 
 .decorate-frame-image {
@@ -523,9 +551,7 @@ img {
   height: auto;
   object-fit: contain;
   flex-shrink: 0;
-  position: relative;
-  left: 140px;
-  top: 10px;
+  /* left: 140px;  <-- 이것도 삭제하세요! */
   z-index: 2;
 }
 
@@ -534,11 +560,61 @@ img {
   top: 0;
   right: 30px;
   bottom: 0;
-  width: 720px;
+  width: 50%;
   height: 100%;
-  object-fit: fill;
   z-index: 1;
 }
+
+.decorate-sticker-panel{
+  background-color: #666;
+  position: absolute;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  top: 0;
+  right: 0;
+  width: 47%;
+  height: 100%;
+  padding: 20px;
+}
+
+.decorate-star8-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.decorate-star9-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.decorate-star10-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.decorate-star11-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.decorate-star12-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+.decorate-star8-image {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  cursor: pointer;
+}
+
 
 /* ======================
    FILTER PAGE

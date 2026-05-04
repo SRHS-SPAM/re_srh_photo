@@ -1,15 +1,27 @@
 import "./App.css";
-import { useState } from "react";
+// 기존: import { useState } from "react";
+import { useState, useEffect } from "react"; // useEffect를 추가해야 합니다!
 
+import mainIntro from "./assets/main.png"; // 실제 파일명에 맞게 수정
+
+import IntroPage from './page/IntroPage';
+import DecoratePage from './page/decoratePage';
+
+/* 프레임 이미지들 */
 import frame1 from "./assets/frame1.png";
 import frame2 from "./assets/frame2.png";
 import frame3 from "./assets/frame3.png";
 import frame4 from "./assets/frame4.png";
 import frame5 from "./assets/frame5.png";
 import frame6 from "./assets/frame6.png";
-
+/* 촬영 화면용 이미지들 */
+import frameBg from "./assets/frame_bg.png";
+import tutorialStrip from "./assets/tutorial_strip.png";
+import blackBar from "./assets/blackbar.png";
+import peopleIcon from "./assets/people_icon.png";
+/* 꾸미기 화면용 이미지들 */
 import shutterBar from "./assets/shutter_bar.png";
-
+/* 사진 찍는 화면용 이미지들 */
 import five from "./assets/5.png";
 import four from "./assets/4.png";
 import three from "./assets/3.png";
@@ -31,6 +43,13 @@ import shootCardOnly from "./assets/card.png";
 
 /* 꾸미기 화면용 스티커 통이미지 */
 import stickerPanel from "./assets/sticker_panel.png";
+
+// /* 꾸미기 요소 이미지들 */ // 이제 안 씀
+// import star8 from "./assets/Star8.png";
+// import star9 from "./assets/Star9.png";
+// import star10 from "./assets/Star10.png";
+// import star11 from "./assets/Star11.png";
+// import star12 from "./assets/Star12.png";
 
 /* 필터 화면용 */
 import nextButton from "./assets/next_button.png";
@@ -56,31 +75,31 @@ const FILTER_ITEMS = [
    INTRO PAGE
 ====================== */
 
-function IntroPage({ onNext }) {
-  return (
-    <div className="intro-page">
-      <div className="intro-wrap">
-        <div className="intro-image-box">
-          <img
-            src={mainIntro}
-            alt="SPAM 첫 화면"
-            className="intro-main-image"
-          />
+// function IntroPage({ onNext }) {
+//   return (
+//     <div className="intro-page">
+//       <div className="intro-wrap">
+//         <div className="intro-image-box">
+//           <img
+//             src={mainIntro}
+//             alt="SPAM 첫 화면"
+//             className="intro-main-image"
+//           />
 
-          <button
-            type="button"
-            className="intro-start-hitbox"
-            onClick={onNext}
-            aria-label="시작하기"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
+//           <button
+//             type="button"
+//             className="intro-start-hitbox"
+//             onClick={onNext}
+//             aria-label="시작하기"
+//           />
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
 /* ======================
-   TUTORIAL PAGE
+   TUTORIAL PAGE test
 ====================== */
 
 function TutorialPage({ onNext }) {
@@ -307,35 +326,64 @@ function ResultPage({ finalFrame, onDecorate }) {
    DECORATE PAGE
 ====================== */
 
-function DecoratePage({ finalFrame, onNext }) {
-  return (
-    <div className="decorate-page">
-      <img src={timer90} alt="" className="decorate-timer-image" />
+// function DecoratePage({ finalFrame, onNext }) {
+//   return (
+//     <div className="decorate-page">
+//       <img src={timer90} alt="" className="decorate-timer-image" />
 
-      <div className="decorate-layout">
-        <button
-          type="button"
-          onClick={onNext}
-          className="decorate-next-button-reset"
-        >
-          <img
-            src={printVertical}
-            alt="넘어가기"
-            className="decorate-print-button-image"
-          />
-        </button>
+//       <div className="decorate-layout">
+//         <button
+//           type="button"
+//           onClick={onNext}
+//           className="decorate-next-button-reset"
+//         >
+//           <img
+//             src={printVertical}
+//             alt="넘어가기"
+//             className="decorate-print-button-image"
+//           />
+//         </button>
 
-        <img src={finalFrame} alt="" className="decorate-frame-image" />
+//         <img src={finalFrame} alt="" className="decorate-frame-image" />
 
-        <img
-          src={stickerPanel}
-          alt=""
-          className="decorate-sticker-panel-image"
-        />
-      </div>
-    </div>
-  );
-}
+//         <div className="decorate-sticker-panel">
+//             {/* 꾸미기 요소들 */}
+//           <img
+//             src={star8}
+//             alt=""
+//             className="decorate-star8-image"
+//               />
+//           <img
+//             src={star9}
+//             alt=""
+//             className="decorate-star9-image"
+//               />
+//           <img
+//             src={star10}
+//             alt=""
+//             className="decorate-star10-image"
+//               />
+//           <img
+//             src={star11}
+//             alt=""
+//             className="decorate-star11-image"
+//               />
+//           <img
+//             src={star12}
+//             alt=""
+//             className="decorate-star12-image"
+//               />
+
+//         </div>
+//         {/* <img
+//           src={stickerPanel}
+//           alt=""
+//           className="decorate-sticker-panel-image"
+//         /> */}
+//       </div>
+//     </div>
+//   );
+// }
 
 /* ======================
    FILTER PAGE
@@ -417,7 +465,8 @@ function FinalPage({ finalFrame }) {
 ====================== */
 
 export default function App() {
-  const [page, setPage] = useState("intro");
+  // const [page, setPage] = useState("intro"); //나중에 바꾸기
+  const [page, setPage] = useState("decorate"); // 테스트용으로 바로 결과 페이지로 시작
   const [selectedFrame, setSelectedFrame] = useState(frame1);
 
   if (page === "intro") {
