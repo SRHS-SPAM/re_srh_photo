@@ -70,6 +70,51 @@ const FILTER_ITEMS = [
   { id: "cool", label: "차가운", image: filterCool },
   { id: "bw", label: "흑백", image: filterBw },
 ];
+function getFilterStyle(filter) {
+  switch (filter) {
+    case "soft":
+      return { filter: "brightness(1.1) blur(1px)" };
+
+    case "warm":
+      return {
+        filter: `
+          brightness(1.25)
+          saturate(1.45)
+          hue-rotate(-12deg)
+        `
+      };
+      // R *1.1 / G *1.05 / B *0.9 느낌
+
+    case "sunset":
+      return {
+        filter: `
+          brightness(1.5)
+          contrast(1.1)
+          saturate(1.2)
+          hue-rotate(-18deg)
+        `
+      };
+      // R *1.3 / G *1.1 / B *0.7 + contrast↑ + saturation↑
+
+    case "cool":
+      return {
+        filter: `
+          brightness(0.95)
+          contrast(1.09)  
+          saturate(1.5)
+          hue-rotate(20deg)
+        `
+      };
+      // R↓ G↓ B↑ 느낌
+
+    case "bw":
+      return { filter: "grayscale(1)" };
+
+    default:
+      return { filter: "none" };
+  }
+}
+
 
 /* ======================
    INTRO PAGE
@@ -389,36 +434,33 @@ function ResultPage({ finalFrame, onDecorate }) {
    FILTER PAGE
 ====================== */
 
-function FilterPage({ finalFrame, onNext }) {
+function FilterPage({ finalFrame, onNext, selectedFilter, setSelectedFilter }) {
   return (
     <div className="filter-page">
-      <img src={timer90} alt="" className="filter-timer-image" />
+      
 
       <div className="filter-top-area">
-        <img src={finalFrame} alt="" className="filter-main-frame-image" />
+        <img
+          src={finalFrame}
+          className="filter-main-frame-image"
+          style={getFilterStyle(selectedFilter)}
+          alt=""
+        />
 
-        <button
-          type="button"
-          className="filter-next-button-reset"
-          onClick={onNext}
-        >
-          <img
-            src={nextButton}
-            alt="넘어가기"
-            className="filter-next-button-image"
-          />
+        <button className="filter-next-button-reset" onClick={onNext}>
+          <img src={nextButton} className="filter-next-button-image" alt="" />
         </button>
       </div>
 
       <div className="filter-bottom-panel">
         <div className="filter-list">
           {FILTER_ITEMS.map((item) => (
-            <div key={item.id} className="filter-item">
-              <img
-                src={item.image}
-                alt={item.label}
-                className="filter-thumb-image"
-              />
+            <div
+              key={item.id}
+              className={`filter-item ${selectedFilter === item.id ? "active" : ""}`}
+              onClick={() => setSelectedFilter(item.id)}
+            >
+              <img src={item.image} className="filter-thumb-image" alt="" />
               <div className="filter-label">{item.label}</div>
             </div>
           ))}
@@ -432,12 +474,17 @@ function FilterPage({ finalFrame, onNext }) {
    FINAL PAGE
 ====================== */
 
-function FinalPage({ finalFrame }) {
+function FinalPage({ finalFrame, selectedFilter }) {
   return (
     <div className="final-page">
       <div className="final-layout">
         <div className="final-left">
-          <img src={finalFrame} alt="" className="final-frame-image" />
+          <img
+            src={finalFrame}
+            alt=""
+            className="final-frame-image"
+            style={getFilterStyle(selectedFilter)} // 🔥 핵심
+          />
         </div>
 
         <div className="final-right">
@@ -468,6 +515,8 @@ export default function App() {
   // const [page, setPage] = useState("intro"); //나중에 바꾸기
   const [page, setPage] = useState("decorate"); // 테스트용으로 바로 결과 페이지로 시작
   const [selectedFrame, setSelectedFrame] = useState(frame1);
+  const [selectedFilter, setSelectedFilter] = useState("normal");
+
 
   if (page === "intro") {
     return <IntroPage onNext={() => setPage("tutorial")} />;
@@ -513,10 +562,17 @@ export default function App() {
     return (
       <FilterPage
         finalFrame={selectedFrame}
+        selectedFilter={selectedFilter}       // 🔥 추가
+        setSelectedFilter={setSelectedFilter} // 🔥 추가
         onNext={() => setPage("final")}
       />
     );
   }
 
-  return <FinalPage finalFrame={selectedFrame} />;
+  return (
+    <FinalPage
+      finalFrame={selectedFrame}
+      selectedFilter={selectedFilter} // 🔥 추가
+    />
+  );
 }
