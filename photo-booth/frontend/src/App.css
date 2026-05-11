@@ -781,35 +781,3 @@ img {
   cursor: pointer;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.22);
 }
-/* 클릭 막힘 해결 */
-.filter-top-area {
-  pointer-events: none;
-}
-
-.filter-next-button-reset {
-  pointer-events: auto;
-}
-
-.filter-bottom-panel {
-  position: relative;
-  z-index: 10;
-}
-
-/* 선택 효과 */
-.filter-item {
-  cursor: pointer;
-  transition: transform 0.23s ease;
-}
-
-.filter-item:hover {
-  transform: scale(1.09);
-}
-
-.filter-item.active {
-  transform: scale(1.08);
-}
-
-.filter-item.active .filter-thumb-image {
-  border: 3px solid #ff4d8d;
-  border-radius: 12px;
-}

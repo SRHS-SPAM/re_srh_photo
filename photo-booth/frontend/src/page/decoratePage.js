@@ -1,15 +1,19 @@
-    import React, { useState, useRef } from 'react';
-    import Draggable from 'react-draggable';
-    import '../App.css';
+import React, { useState, useRef } from 'react';
+import Draggable from 'react-draggable';
+import '../App.css';
 
-    // 에셋 임포트 (기존과 동일)
-    import timer90 from "../assets/timer_90.png";
-    import printVertical from "../assets/print_button.png";
-    import star8 from "../assets/Star8.png";
-    import star9 from "../assets/Star9.png";
-    import star10 from "../assets/Star10.png";
-    import star11 from "../assets/Star11.png";
-    import star12 from "../assets/Star12.png";
+// 에셋 임포트 (기존과 동일)
+import timer90 from "../assets/timer_90.png";
+import printVertical from "../assets/print_button.png";
+import star8 from "../assets/Star8.png";
+import star9 from "../assets/Star9.png";
+import star10 from "../assets/Star10.png";
+import star11 from "../assets/Star11.png";
+import star12 from "../assets/Star12.png";
+
+
+//얘 뭐지?
+// import stickerPanel from "./assets/sticker_panel.png";
 
     export default function DecoratePage({ finalFrame, onNext }) {
     const [stickers, setStickers] = useState([]);
