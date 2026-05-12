@@ -52,16 +52,21 @@ export default function FilterPage({ stickers, finalFrame, onNext }) {
 
           {/* ★ 3. 부모에게 받은 스티커 목록을 그대로 다시 렌더링 */}
           {stickers && stickers.map((s) => (
-            <img 
+            <div 
               key={s.id} 
-              src={s.url} 
-              alt="sticker"
               style={{ 
                 position: 'absolute', 
-                left: s.x, // 꾸미기 페이지에서 정한 x좌표
-                top: s.y,  // 꾸미기 페이지에서 정한 y좌표
-                width: '100px', // 스티커 크기에 맞게 조절
-                pointerEvents: 'none' // 버튼 클릭 방해 방지
+                left: `${100 + s.x}px`, 
+                top: `${100 + s.y}px`,
+                width: `${s.width}px`, 
+                height: `${s.height}px`,
+                backgroundImage: `url(${s.img})`,
+                backgroundSize: '100% 100%',
+                backgroundRepeat: 'no-repeat',
+                transform: `rotate(${s.rotate}deg)`,
+                zIndex: 999, // 매우 높은 z-index 부여
+                pointerEvents: 'none',
+                display: 'block' // 확실히 보이도록 설정
               }} 
             />
           ))}

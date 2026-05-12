@@ -15,8 +15,7 @@ import star12 from "../assets/Star12.png";
 //얘 뭐지?
 // import stickerPanel from "./assets/sticker_panel.png";
 
-    export default function DecoratePage({ finalFrame, onNext }) {
-    const [stickers, setStickers] = useState([]);
+    export default function DecoratePage({ stickers, setStickers, finalFrame, onNext }) {
     const [topStickerId, setTopStickerId] = useState(null);
     const nodeRefs = useRef({});
 
@@ -30,8 +29,14 @@ import star12 from "../assets/Star12.png";
 
     const spawnSticker = (img) => {
         const newId = Date.now();
-        setStickers([...stickers, { id: newId, img, width: 120, height: 120, rotate: 0 }]);
+        setStickers([...stickers, { id: newId, img, width: 120, height: 120, rotate: 0, x: 0, y: 0 }]);
         setTopStickerId(newId);
+    };
+
+    const handleStop = (id, data) => {
+        setStickers((prev) =>
+            prev.map((s) => (s.id === id ? { ...s, x: data.x, y: data.y } : s))
+        );
     };
 
     // 회전 핸들 로직
@@ -101,13 +106,12 @@ import star12 from "../assets/Star12.png";
                     <Draggable
                         key={sticker.id}
                         nodeRef={nodeRefs.current[sticker.id]}
+                        position={{ x: sticker.x, y: sticker.y }}
+                        onStop={(e, data) => handleStop(sticker.id, data)}
                         onStart={() => setTopStickerId(sticker.id)}
                         cancel=".action-btn"
                         bounds="parent"
                     >
-                        {/* 핵심 수정: Draggable 바로 아래 div에는 rotate를 주지 않고, 
-                        그 안의 내부 div(sticker-content)에 rotate를 주어야 충돌이 없습니다.
-                        */}
                         <div
                         ref={nodeRefs.current[sticker.id]}
                         style={{
@@ -125,7 +129,7 @@ import star12 from "../assets/Star12.png";
                             backgroundImage: `url(${sticker.img})`,
                             backgroundSize: '100% 100%',
                             backgroundRepeat: 'no-repeat',
-                            transform: `rotate(${sticker.rotate}deg)`, // 여기서 회전 처리
+                            transform: `rotate(${sticker.rotate}deg)`, 
                             outline: isSelected ? '2px dashed #4dabf7' : 'none',
                             }}
                             onClick={(e) => e.stopPropagation()}
