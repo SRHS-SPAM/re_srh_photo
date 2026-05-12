@@ -8,7 +8,7 @@ import filterSunset from "../assets/filter_sunset.png";
 import filterCool from "../assets/filter_cool.png";
 import filterBw from "../assets/filter_bw.png";
 
-import { useState } from "react"; // 🔥 추가
+import { useState } from "react";
 
 const FILTER_ITEMS = [
   { id: "normal", label: "일반", image: filterNormal },
@@ -19,26 +19,20 @@ const FILTER_ITEMS = [
   { id: "bw", label: "흑백", image: filterBw },
 ];
 
-export default function FilterPage({ finalFrame, onNext }) {
+// ★ 1. 인자(Props)에 stickers를 꼭 추가하세요!
+// Props 부분에 stickers를 반드시 추가!
+export default function FilterPage({ stickers, finalFrame, onNext }) {
 
-  // 🔥 필터 상태 추가
   const [selectedFilter, setSelectedFilter] = useState("normal");
 
-  // 🔥 필터 함수
   function getFilterStyle(filter) {
     switch (filter) {
-      case "soft":
-        return { filter: "brightness(1.1) blur(1px)" };
-      case "warm":
-        return { filter: "sepia(0.4) saturate(1.2)" };
-      case "sunset":
-        return { filter: "hue-rotate(-20deg) saturate(1.5)" };
-      case "cool":
-        return { filter: "hue-rotate(180deg) brightness(0.9)" };
-      case "bw":
-        return { filter: "grayscale(1)" };
-      default:
-        return { filter: "none" };
+      case "soft": return { filter: "brightness(1.1) blur(1px)" };
+      case "warm": return { filter: "sepia(0.4) saturate(1.2)" };
+      case "sunset": return { filter: "hue-rotate(-20deg) saturate(1.5)" };
+      case "cool": return { filter: "hue-rotate(180deg) brightness(0.9)" };
+      case "bw": return { filter: "grayscale(1)" };
+      default: return { filter: "none" };
     }
   }
 
@@ -47,12 +41,31 @@ export default function FilterPage({ finalFrame, onNext }) {
       <img src={timer90} alt="" className="filter-timer-image" />
 
       <div className="filter-top-area">
-        <img
-          src={finalFrame}
-          alt=""
-          className="filter-main-frame-image"
-          style={getFilterStyle(selectedFilter)} // 🔥 여기 핵심
-        />
+        {/* ★ 2. 스티커 좌표의 기준이 될 컨테이너 (position: relative 필수) */}
+        <div style={{ position: 'relative', display: 'inline-block' }}>
+          <img
+            src={finalFrame}
+            alt=""
+            className="filter-main-frame-image"
+            style={getFilterStyle(selectedFilter)}
+          />
+
+          {/* ★ 3. 부모에게 받은 스티커 목록을 그대로 다시 렌더링 */}
+          {stickers && stickers.map((s) => (
+            <img 
+              key={s.id} 
+              src={s.url} 
+              alt="sticker"
+              style={{ 
+                position: 'absolute', 
+                left: s.x, // 꾸미기 페이지에서 정한 x좌표
+                top: s.y,  // 꾸미기 페이지에서 정한 y좌표
+                width: '100px', // 스티커 크기에 맞게 조절
+                pointerEvents: 'none' // 버튼 클릭 방해 방지
+              }} 
+            />
+          ))}
+        </div>
 
         <button
           type="button"
@@ -73,7 +86,7 @@ export default function FilterPage({ finalFrame, onNext }) {
             <div
               key={item.id}
               className={`filter-item ${selectedFilter === item.id ? "active" : ""}`}
-              onClick={() => setSelectedFilter(item.id)} // 🔥 클릭 시 변경
+              onClick={() => setSelectedFilter(item.id)}
             >
               <img
                 src={item.image}

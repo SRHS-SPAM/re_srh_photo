@@ -28,7 +28,7 @@ export default function App() {
     console.log("새 사진 추가됨:", imageSrc);
   };
 
-
+  // const [stickers, setStickers] = useState([]);
   //이미지 꾸미기 위해 스티커 상태 추가
   // 스티커들을 저장할 배열 상태 (초기값은 로컬스토리지에서 가져옴)
   const [stickers, setStickers] = useState(() => {
@@ -43,28 +43,7 @@ export default function App() {
 
   /* ... 다른 로직들 ... */
 
-  // 꾸미기 페이지와 필터 페이지 모두에 stickers와 setStickers를 전달합니다.
-  if (page === "decorate") {
-    return (
-      <DecoratePage
-        finalFrame={selectedFrame}
-        stickers={stickers}
-        setStickers={setStickers}
-        onNext={() => setPage("filter")}
-      />
-    );
-  }
 
-  if (page === "filter") {
-    return (
-      <FilterPage
-        stickers={stickers} // 필터 페이지에서도 똑같은 스티커 배열을 보여줌
-        setStickers={setStickers}
-        onNext={() => setPage("final")}
-        finalFrame={selectedFrame}
-      />
-    );
-  }
 
   /* 3. 페이지 전환 로직 (조건부 렌더링) */
   
@@ -82,9 +61,9 @@ export default function App() {
   if (page === "frame") {
     return (
       <FramePage
+        selectedFrame={selectedFrame} 
+        setSelectedFrame={setSelectedFrame} 
         onNext={() => setPage("shoot")}
-        selectedFrame={selectedFrame}
-        setSelectedFrame={setSelectedFrame}
       />
     );
   }
@@ -107,6 +86,31 @@ export default function App() {
         finalFrame={selectedFrame}
         photos={photos}               // 찍은 사진들 전달
         onDecorate={() => setPage("decorate")}
+      />
+    );
+  }
+
+  // 꾸미기 페이지와 필터 페이지 모두에 stickers와 setStickers를 전달합니다.
+  if (page === "decorate") {
+    return (
+      <DecoratePage
+        finalFrame={selectedFrame}
+        photos={photos}
+        stickers={stickers}      // 현재 스티커 목록 전달
+        setStickers={setStickers} // 스티커를 추가/수정할 함수 전달
+        onNext={() => setPage("filter")}
+      />
+
+    );
+  }
+
+  // App.js 내부 페이지 전환 로직
+  if (page === "filter") {
+    return (
+      <FilterPage 
+        stickers={stickers}      // ★ 작성하신 코드의 { stickers } 인자로 전달됨
+        finalFrame={selectedFrame} 
+        onNext={() => setPage("final")} 
       />
     );
   }
