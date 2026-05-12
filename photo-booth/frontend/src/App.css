@@ -277,7 +277,9 @@ img {
   font-size: 34px;
   border: none;
   cursor: pointer;
-  margin-top: 24px;
+  margin-top: 24px; 
+  position: relative; /* z-index를 먹이기 위해 필요 */
+  z-index: 999;
 }
 
 .next-button:hover {
