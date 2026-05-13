@@ -9,13 +9,14 @@ import FramePage from './page/framePage';
 import WebcamCapture from './page/WebcamCapture';
 import ResultPage from './page/resultPage';
 import FilterPage from './page/filterPage';
+import FinalPage from './page/finalPage';
 
 /* 프레임 이미지들 */
 import frame1 from "./assets/frame1.png";
 
 export default function App() {
   /* 1. 상태 관리 (State) */
-  // const [page, setPage] = useState("intro");
+  // const [page, setPage] = useState("intro"); // 현재 페이지 상태 (intro, tutorial, frame, shoot, result, decorate, filter, final 등)
   const [page, setPage] = useState("decorate"); // 🔥 테스트용으로 바로 꾸미기 페이지로 시작
   
   
@@ -41,7 +42,7 @@ export default function App() {
     localStorage.setItem("photo-stickers", JSON.stringify(stickers));
   }, [stickers]);
 
-  /* ... 다른 로직들 ... */
+
 
 
 
@@ -100,40 +101,34 @@ export default function App() {
         setStickers={setStickers} // 스티커를 추가/수정할 함수 전달
         onNext={() => setPage("filter")}
       />
-
+      
     );
   }
-
+  
   // App.js 내부 페이지 전환 로직
   if (page === "filter") {
     return (
       <FilterPage 
         stickers={stickers}      // ★ 작성하신 코드의 { stickers } 인자로 전달됨
+        photos={photos}
         finalFrame={selectedFrame} 
         onNext={() => setPage("final")} 
       />
     );
   }
 
-  // 꾸미기 페이지
-  // if (page === "decorate") {
-  //   return (
-  //     <DecoratePage
-  //       finalFrame={selectedFrame}
-  //       onNext={() => setPage("filter")}
-  //     />
-  //   );
-  // }
-
-  // 필터 페이지
-  // if (page === "filter") {
-  //   return (
-  //     <FilterPage
-  //       finalFrame={selectedFrame}
-  //       onNext={() => setPage("final")}
-  //     />
-  //   );
-  // }
+  if (page === "final") {
+    return (
+      <FinalPage 
+        finalFrame={selectedFrame} 
+        stickers={stickers} // 이 부분이 있어야 위 코드가 작동합니다!
+        onReset={() => {
+          setStickers([]);
+          setPage("intro");
+        }} 
+      />
+    );
+  }
 
   return <div>마지막 페이지 (구현 예정)</div>;
 }
