@@ -16,8 +16,8 @@ import frame1 from "./assets/frame1.png";
 
 export default function App() {
   /* 1. 상태 관리 (State) */
-  // const [page, setPage] = useState("intro"); // 현재 페이지 상태 (intro, tutorial, frame, shoot, result, decorate, filter, final 등)
-  const [page, setPage] = useState("decorate"); // 🔥 테스트용으로 바로 꾸미기 페이지로 시작
+  const [page, setPage] = useState("intro"); // 현재 페이지 상태 (intro, tutorial, frame, shoot, result, decorate, filter, final 등)
+  // const [page, setPage] = useState("decorate"); // 🔥 테스트용으로 바로 꾸미기 페이지로 시작
   
   
   const [selectedFrame, setSelectedFrame] = useState(frame1);
