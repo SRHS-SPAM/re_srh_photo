@@ -1,95 +1,125 @@
-/* .webcam-container의 설정을 조정하여 웹캠, 컨트롤, 타이머의 배치를 조정 */
 .webcam-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+
+  position: relative;
+
   display: flex;
-  flex-direction: column;
-  align-items: center; /* 수평 중앙 정렬 */
-  justify-content: center; /* 수직 중앙 정렬 */
-  width: 100vw; /* 전체 화면 너비 */
-  height: 100vh; /* 전체 화면 높이 */
-  background-color: #ffffff; /* 배경색 설정 */
-  padding: 20px; /* 여백 추가 */
-  box-sizing: border-box; /* 패딩을 포함한 전체 크기 계산 */
-  position: absolute;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
   z-index: 9;
 }
 
 .camera-frame {
-  width: 100%;
-  height: 100%;
   position: absolute;
+
+  top: 10vh;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 418px;
+  height: 586px;
+
   z-index: 2;
+
+  pointer-events: none;
 }
 
-/* .webcam 설정을 조정하여 화면에 맞게 표시 */
 .webcam {
-  width: 70%; /* 웹캠의 너비 조정 */
-  height: 60%; /* 웹캠의 높이 조정 */
-  transform: scaleX(-1);
-  object-fit: contain; /* 비율 유지하며 컨테이너에 맞춤 */
-  margin-bottom: 5%;
+  position: absolute;
+
+  top: 10vh;
+  left: 50%;
+
+  transform: translateX(-50%) scaleX(-1);
+
+  width: 418px;
+  height: 586px;
+
+  object-fit: cover;
+
   z-index: 1;
 }
 
-/* 카운트다운 타이머의 스타일 설정 */
 .countdown-overlay {
   position: absolute;
-  top: 45%;
-  left: 50%; /* 수평 중앙 */
-  transform: translate(-45%, -50%);
-  font-size: 250px; /* 타이머 크기 */
-  color: white; /* 타이머 색상 */
-  font-weight: bold; /* 두껍게 표시 */
+
+  top: calc(10vh + 170px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  font-size: 250px;
+  color: white;
+  font-weight: bold;
   font-family: EF_jejudoldam;
-  z-index: 2;
+
   opacity: 30%;
+
+  z-index: 3;
 }
 
-/* 컨트롤 패널의 배치 설정 */
 .controls {
-  margin-top: 28%;
-  text-align: center; /* 텍스트와 아이콘 중앙 정렬 */
   position: absolute;
-  z-index: 2;
 
+  top: calc(10vh + 600px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  text-align: center;
+
+  z-index: 4;
 }
 
-/* 사진 찍은 개수와 관련된 텍스트 스타일 */
 .controls p {
-  margin: 20px 0;
+  margin: 0;
+
   font-size: 30px;
   font-family: Tienne-Regular;
-  color: black; /* 텍스트 색상 */
+
+  color: black;
 }
 
-
 .camera-button {
-  padding: 4px 150px; /* 버튼의 상하, 좌우 패딩을 크게 조정 */
-  font-size: x-large; /* 폰트 크기를 크게 설정 */
-  font-weight: bold;
-  border: none;
-  border-radius: 15px; /* 버튼의 모서리를 조금 더 둥글게 설정 */
-  background-color: #A4A4A4;
-  color: #ffffff;
-  cursor: pointer;
-  display: flex; /* flexbox로 중앙 정렬 유지 */
-  align-items: center; /* 수직 중앙 정렬 */
-  justify-content: center; /* 수평 중앙 정렬 */
-  transition: background-color 0.3s, transform 0.3s;
-  width: auto; 
-  max-width: 100%; /* 버튼 크기가 화면을 넘지 않도록 설정 */
-  margin-top: 37%;
   position: absolute;
-  z-index: 2;
 
+  top: calc(10vh + 665px);
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 340px;
+  height: 58px;
+
+  border: none;
+  border-radius: 15px;
+
+  background-color: #a4a4a4;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 0.3s, transform 0.3s;
+
+  z-index: 4;
 }
 
 .camera-button:hover {
   background-color: #7b7b7b;
-  transform: scale(1.08); /* 호버 시 크기 증가 */
 }
 
-.camera-icon{
-  width: 50px; /* 아이콘 이미지 너비 */
-  height: 50px; /* 아이콘 이미지 높이 */
-  z-index: 2;
+.camera-icon {
+  width: 50px;
+  height: 50px;
+
+  z-index: 5;
 }

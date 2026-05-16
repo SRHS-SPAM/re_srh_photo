@@ -1,3 +1,4 @@
+App.css
 * {
   box-sizing: border-box;
 }
@@ -70,19 +71,36 @@ img {
 }
 
 
-.intro-start-hitbox {
+.intro-start-button {
   position: absolute;
+
   left: 50%;
-  bottom: 6%;
-  width: 46%;
-  height: 11%;
-  margin-left: -23%;
+  bottom: 8%;
+
+  transform: translateX(-50%);
+
+  width: 720px;
+  height: 92px;
+
   border: none;
-  background: transparent;
+  border-radius: 20px;
+
+  background: #777;
+  color: #fff;
+
+  font-size: 34px;
+  font-family: "MyFont";
+
   cursor: pointer;
-  padding: 0;
+
+  z-index: 999;
+
+  transition: 0.15s ease;
 }
 
+.intro-start-button:hover {
+  background: #5f5f5f;
+}
 /* ======================
    APP
 ====================== */
@@ -435,7 +453,7 @@ img {
 }
 
 .result-frame-image {
-  width: 350px;
+  width: 400px;
 }
 
 .result-image-button {
@@ -446,17 +464,39 @@ img {
 }
 
 .decorate-button {
-  margin-top: 18px;
+  margin-top: 24px;
+
+  width: 340px;
+  height: 72px;
+
+  border: none;
+  border-radius: 20px;
+
+  background: #777;
+  color: #fff;
+
+  font-size: 34px;
+  font-family: "MyFont";
+
+  cursor: pointer;
+
+  transition: 0.15s ease;
+
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+}
+
+.decorate-button:hover {
+  background: #5f5f5f;
 }
 
 .decorate-image {
-  width: 515px;
+  width: 620px;
 }
 
 .left-bubble-image {
   position: absolute;
-  width: 170px;
-  right: -162px;
+  width: 185px;
+  right: -200px;
   bottom: 73px;
 }
 
@@ -467,7 +507,7 @@ img {
 }
 
 .qr-card {
-  width: 445px;
+  width: 500px;
   background: #f6f6f6;
   border-radius: 28px;
   padding: 26px 28px;
@@ -475,7 +515,7 @@ img {
 
 .qr-guide-text {
   font-family: "MyFont";
-  font-size: 30px;
+  font-size: 34px;
   margin-bottom: 22px;
   line-height: 1.25;
 }
@@ -486,15 +526,37 @@ img {
 }
 
 .qr-box-image {
-  width: 145px;
+  width: 160px;
 }
 
 .print-button {
   margin-top: 34px;
+
+  width: 220px;
+  height: 62px;
+
+  border: none;
+  border-radius: 20px;
+
+  background: #777;
+  color: #fff;
+
+  font-size: 24px;
+  font-family: "MyFont";
+
+  cursor: pointer;
+
+  transition: 0.15s ease;
+
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+}
+
+.print-button:hover {
+  background: #5f5f5f;
 }
 
 .print-bubble-image {
-  width: 205px;
+  width: 220px;
 }
 
 /* ======================
@@ -510,12 +572,55 @@ img {
   /* justify-content: flex-start;  <-- 필요없으면 삭제 */
 }
 
-.decorate-timer-image {
+
+.decorate-timer-wrap {
   position: absolute;
   top: 28px;
   left: 24px;
-  width: 80px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   z-index: 10;
+}
+
+.decorate-timer-image {
+  width: 52px;
+}
+
+.decorate-timer-text {
+  font-size: 34px;
+  color: #333;
+  font-family: "MyFont";
+}
+
+
+.decorate-next-button {
+  width: 90px;
+  height: 440px;
+
+  border: none;
+  border-radius: 20px;
+
+  background: #666;
+  color: #fff;
+
+  font-size: 34px;
+  font-family: "MyFont";
+
+  cursor: pointer;
+
+  writing-mode: vertical-rl;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+  transition: 0.15s ease;
+}
+
+.decorate-next-button:hover {
+  background: #5f5f5f;
 }
 
 .decorate-layout {
@@ -547,7 +652,6 @@ img {
   flex-shrink: 0;
   /* left: 200px;  <-- 이거 삭제하세요! */
 }
-
 .decorate-frame-image {
   width: 520px;
   height: auto;
@@ -632,12 +736,26 @@ img {
   flex-direction: column;
 }
 
-.filter-timer-image {
+.filter-timer-wrap {
   position: absolute;
   top: 28px;
   left: 24px;
-  width: 80px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
   z-index: 10;
+}
+
+.filter-timer-image {
+  width: 52px;
+}
+
+.filter-timer-text {
+  font-size: 34px;
+  color: #333;
+  font-family: "MyFont";
 }
 
 .filter-top-area {
@@ -655,21 +773,33 @@ img {
   margin-top: 0;
 }
 
-.filter-next-button-reset {
+.filter-next-button {
   position: absolute;
   right: 85px;
-  top: 90%;
+  top: 74%;
+
+  width: 150px;
+  height: 62px;
+
   border: none;
-  background: transparent;
-  padding: 0;
+  border-radius: 16px;
+
+  background: #666;
+  color: #fff;
+
+  font-size: 24px;
+  font-family: "MyFont";
+
   cursor: pointer;
+
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+  transition: 0.15s ease;
+
   z-index: 20;
 }
 
-.filter-next-button-image {
-  width: 124px;
-  height: auto;
-  display: block;
+.filter-next-button:hover {
+  background: #5f5f5f;
 }
 
 .filter-bottom-panel {

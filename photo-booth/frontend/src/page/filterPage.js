@@ -1,6 +1,5 @@
 import '../App.css';
 import timer90 from "../assets/timer_90.png";
-import nextButton from "../assets/next_button.png";
 import filterNormal from "../assets/filter_normal.png";
 import filterSoft from "../assets/filter_soft.png";
 import filterWarm from "../assets/filter_warm.png";
@@ -19,30 +18,60 @@ const FILTER_ITEMS = [
   { id: "bw", label: "흑백", image: filterBw },
 ];
 
-// ★ 1. 인자(Props)에 stickers를 꼭 추가하세요!
-// Props 부분에 stickers를 반드시 추가!
-export default function FilterPage({ stickers, finalFrame, onNext }) {
+export default function FilterPage({
+  stickers,
+  finalFrame,
+  onNext,
+  timeLeft
+}) {
 
   const [selectedFilter, setSelectedFilter] = useState("normal");
 
   function getFilterStyle(filter) {
     switch (filter) {
-      case "soft": return { filter: "brightness(1.1) blur(1px)" };
-      case "warm": return { filter: "sepia(0.4) saturate(1.2)" };
-      case "sunset": return { filter: "hue-rotate(-20deg) saturate(1.5)" };
-      case "cool": return { filter: "hue-rotate(180deg) brightness(0.9)" };
-      case "bw": return { filter: "grayscale(1)" };
-      default: return { filter: "none" };
+      case "soft":
+        return { filter: "brightness(1.1) blur(1px)" };
+
+      case "warm":
+        return { filter: "sepia(0.4) saturate(1.2)" };
+
+      case "sunset":
+        return { filter: "hue-rotate(-20deg) saturate(1.5)" };
+
+      case "cool":
+        return { filter: "hue-rotate(180deg) brightness(0.9)" };
+
+      case "bw":
+        return { filter: "grayscale(1)" };
+
+      default:
+        return { filter: "none" };
     }
   }
 
   return (
     <div className="filter-page">
-      <img src={timer90} alt="" className="filter-timer-image" />
+
+      <div className="filter-timer-wrap">
+        <img
+          src={timer90}
+          alt=""
+          className="filter-timer-image"
+        />
+
+        <span className="filter-timer-text">
+          {timeLeft}
+        </span>
+      </div>
 
       <div className="filter-top-area">
-        {/* ★ 2. 스티커 좌표의 기준이 될 컨테이너 (position: relative 필수) */}
-        <div style={{ position: 'relative', display: 'inline-block' }}>
+
+        <div
+          style={{
+            position: 'relative',
+            display: 'inline-block'
+          }}
+        >
           <img
             src={finalFrame}
             alt=""
@@ -50,47 +79,45 @@ export default function FilterPage({ stickers, finalFrame, onNext }) {
             style={getFilterStyle(selectedFilter)}
           />
 
-          {/* ★ 3. 부모에게 받은 스티커 목록을 그대로 다시 렌더링 */}
           {stickers && stickers.map((s) => (
-            <div 
-              key={s.id} 
-              style={{ 
-                position: 'absolute', 
-                left: `${100 + s.x}px`, 
+            <div
+              key={s.id}
+              style={{
+                position: 'absolute',
+                left: `${100 + s.x}px`,
                 top: `${100 + s.y}px`,
-                width: `${s.width}px`, 
+                width: `${s.width}px`,
                 height: `${s.height}px`,
                 backgroundImage: `url(${s.img})`,
                 backgroundSize: '100% 100%',
                 backgroundRepeat: 'no-repeat',
                 transform: `rotate(${s.rotate}deg)`,
-                zIndex: 999, // 매우 높은 z-index 부여
+                zIndex: 999,
                 pointerEvents: 'none',
-                display: 'block' // 확실히 보이도록 설정
-              }} 
+                display: 'block'
+              }}
             />
           ))}
         </div>
 
         <button
           type="button"
-          className="filter-next-button-reset"
+          className="filter-next-button"
           onClick={onNext}
         >
-          <img
-            src={nextButton}
-            alt="넘어가기"
-            className="filter-next-button-image"
-          />
+          넘어가기
         </button>
       </div>
 
       <div className="filter-bottom-panel">
         <div className="filter-list">
+
           {FILTER_ITEMS.map((item) => (
             <div
               key={item.id}
-              className={`filter-item ${selectedFilter === item.id ? "active" : ""}`}
+              className={`filter-item ${
+                selectedFilter === item.id ? "active" : ""
+              }`}
               onClick={() => setSelectedFilter(item.id)}
             >
               <img
@@ -98,9 +125,13 @@ export default function FilterPage({ stickers, finalFrame, onNext }) {
                 alt={item.label}
                 className="filter-thumb-image"
               />
-              <div className="filter-label">{item.label}</div>
+
+              <div className="filter-label">
+                {item.label}
+              </div>
             </div>
           ))}
+
         </div>
       </div>
     </div>

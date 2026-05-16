@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import Webcam from "react-webcam";
 import "./WebcamCapture.css";
+import shutterCircle from "../assets/shutter_circle.png";
 
-const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
-  // 1. 모든 State와 Ref는 최상단에 위치해야 합니다.
+const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
   const webcamRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
   const [countdown, setCountdown] = useState(0);
@@ -12,22 +12,20 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
   const [videoDevices, setVideoDevices] = useState([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState("");
 
-  // 2. 카메라 장치를 감지하는 함수 (useCallback)
   const getVideoDevices = useCallback(async () => {
     try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoInputs = devices.filter((device) => device.kind === "videoinput");
-      setVideoDevices(videoInputs);
+      await navigator.mediaDevices.getUserMedia({ video: true });
 
-      // 외부 웹캠(HDMI/USB) 우선 탐지
-      const externalWebcams = videoInputs.filter(
-        (device) =>
-          !device.label.toLowerCase().includes("built") &&
-          !device.label.toLowerCase().includes("internal")
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const videoInputs = devices.filter(
+        (device) => device.kind === "videoinput"
       );
 
-      if (externalWebcams.length > 0) {
-        setSelectedDeviceId(externalWebcams[0].deviceId);
+      setVideoDevices(videoInputs);
+      console.log("감지된 카메라 목록:", videoInputs);
+
+      if (videoInputs.length >= 3) {
+        setSelectedDeviceId(videoInputs[2].deviceId);
       } else if (videoInputs.length > 0) {
         setSelectedDeviceId(videoInputs[0].deviceId);
       }
@@ -36,38 +34,59 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
     }
   }, []);
 
-  // 3. 컴포넌트 마운트 시 실행되는 Effect
   useEffect(() => {
     getVideoDevices();
+
     navigator.mediaDevices.addEventListener("devicechange", getVideoDevices);
+
     return () => {
-      navigator.mediaDevices.removeEventListener("devicechange", getVideoDevices);
+      navigator.mediaDevices.removeEventListener(
+        "devicechange",
+        getVideoDevices
+      );
     };
   }, [getVideoDevices]);
 
-  // 4. 촬영 및 가공 관련 함수들
   const playSound = () => {
     const audio = new Audio("./mp3.mp3");
     audio.play().catch(() => console.log("오디오 재생 실패"));
   };
 
-  const handleAddPhoto = useCallback((imageSrc) => {
-    addPhoto(imageSrc);
-  }, [addPhoto]);
+  const handleAddPhoto = useCallback(
+    (imageSrc) => {
+      addPhoto(imageSrc);
+
+      if (photoCount + 1 >= 4) {
+        setTimeout(() => {
+          onComplete?.();
+        }, 500);
+      }
+    },
+    [addPhoto, photoCount, onComplete]
+  );
 
   const cropImage = (imageSrc) => {
     return new Promise((resolve) => {
       const img = new Image();
       img.src = imageSrc;
+
       img.onload = () => {
         const canvas = document.createElement("canvas");
-        canvas.width = 1920; 
+        canvas.width = 1920;
         canvas.height = 2560;
+
         const ctx = canvas.getContext("2d");
-        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+
+        const scale = Math.max(
+          canvas.width / img.width,
+          canvas.height / img.height
+        );
+
         const x = canvas.width / 2 - (img.width / 2) * scale;
         const y = canvas.height / 2 - (img.height / 2) * scale;
+
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
+
         resolve(canvas.toDataURL("image/jpeg", 1.0));
       };
     });
@@ -75,16 +94,19 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
 
   const capture = () => {
     if (photoCount >= 4 || capturing) return;
+
     setCapturing(true);
     setCountdown(5);
     setPhotoIndex(0);
   };
 
-  // 5. 자동 촬영 로직 처리 Effect
   useEffect(() => {
     let timer;
+
     if (capturing && countdown > 0) {
-      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
     } else if (
       countdown === 0 &&
       capturing &&
@@ -92,12 +114,14 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
       !isProcessing
     ) {
       setIsProcessing(true);
+
       const imageSrc = webcamRef.current?.getScreenshot();
 
       if (imageSrc) {
         cropImage(imageSrc).then((croppedImage) => {
           handleAddPhoto(croppedImage);
           playSound();
+
           setPhotoIndex((prev) => prev + 1);
           setCountdown(5);
           setIsProcessing(false);
@@ -112,20 +136,30 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
     }
 
     return () => clearTimeout(timer);
-  }, [capturing, countdown, handleAddPhoto, photoIndex, photoCount, isProcessing]);
+  }, [
+    capturing,
+    countdown,
+    handleAddPhoto,
+    photoIndex,
+    photoCount,
+    isProcessing,
+  ]);
 
-  // 6. 마지막에 딱 한 번만 return 문이 와야 합니다.
   return (
     <div className="webcam-container">
-      <img src={`${process.env.PUBLIC_URL}/camera-frame.png`} className="camera-frame" alt="카메라 프레임" />
-      
+      <img
+        // src={`${process.env.PUBLIC_URL}/camera-frame.png`}
+        // className="camera-frame"
+        // alt="카메라 프레임"
+      />
+
       {selectedDeviceId ? (
         <Webcam
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
           videoConstraints={{
-            deviceId: { exact: selectedDeviceId }, // 강제 연결
+            deviceId: { exact: selectedDeviceId },
             width: 960,
             height: 1280,
           }}
@@ -144,8 +178,12 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto }) => {
         <p>{photoCount}/4</p>
       </div>
 
-      <button className="camera-button" onClick={capture} disabled={!selectedDeviceId || capturing}>
-        <img className="camera-icon" src={`${process.env.PUBLIC_URL}/camera.png`} alt="촬영" />
+      <button
+        className="camera-button"
+        onClick={capture}
+        disabled={!selectedDeviceId || capturing}
+      >
+        <img className="camera-icon" src={shutterCircle} alt="촬영" />
       </button>
     </div>
   );
