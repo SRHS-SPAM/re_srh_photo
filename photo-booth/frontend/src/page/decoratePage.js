@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef, useEffect } from 'react'; // 👈 useEffect 추가
 import Draggable from 'react-draggable';
 import '../App.css';
 
@@ -8,6 +8,40 @@ import star9 from "../assets/Star9.png";
 import star10 from "../assets/Star10.png";
 import star11 from "../assets/Star11.png";
 import star12 from "../assets/Star12.png";
+
+import heart_R from "../assets/stickers/Group 1597881030.png";
+import heart_O from "../assets/stickers/Group 1597881031.png";
+import heart_Y from "../assets/stickers/Group 1597881032.png";
+import heart_B from "../assets/stickers/Group 1597881033.png";
+import heart_P from "../assets/stickers/Group 1597881034.png";
+import heart_c from "../assets/stickers/Group 1597881035.png";
+import heart_W from "../assets/stickers/Group 1597881036.png";
+import heart_1 from "../assets/stickers/Vector 122.png";
+import heart_2 from "../assets/stickers/Vector 123.png";
+import love from "../assets/stickers/love.png";
+
+import smile from "../assets/stickers/Smile.png";
+import merong from "../assets/stickers/merong.png";
+import sadness from "../assets/stickers/Sadness.png";
+import sunglasses from "../assets/stickers/Sunglasses.png";
+import glasses from "../assets/stickers/Glasses.png";
+
+import Tears from "../assets/stickers/Tears.png";
+import Angry from "../assets/stickers/Angry.png";
+import Ribbon from "../assets/stickers/Ribbon.png";
+import angel from "../assets/stickers/angel.png";
+import Devil from "../assets/stickers/Devil.png";
+
+import cloud from "../assets/stickers/cloud.png";
+import Wings from "../assets/stickers/Vector 149.png";
+import Nakutomaki from "../assets/stickers/Nakutomaki.png";
+import ice_cream from "../assets/stickers/ice cream.png";
+
+import crown from "../assets/stickers/crown.png";
+import clover from "../assets/stickers/clover.png";
+import Twinkle from "../assets/stickers/Twinkle.png";
+import Black from "../assets/stickers/Black_logo.png";
+import White from "../assets/stickers/White_logo.png";
 
 export default function DecoratePage({ stickers, setStickers, finalFrame, onNext, timeLeft }) {
   const [topStickerId, setTopStickerId] = useState(null);
@@ -19,14 +53,77 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, onNext
     { id: 'star10', img: star10 },
     { id: 'star11', img: star11 },
     { id: 'star12', img: star12 },
+    { id: 'heart_R', img: heart_R },
+    { id: 'heart_O', img: heart_O },
+    { id: 'heart_Y', img: heart_Y },
+    { id: 'heart_B', img: heart_B },
+    { id: 'heart_P', img: heart_P },
+    { id: 'heart_c', img: heart_c },
+    { id: 'heart_W', img: heart_W },
+    { id: 'heart_1', img: heart_1 },
+    { id: 'heart_2', img: heart_2 },
+    { id: 'love', img: love },
+    { id: 'smile', img: smile },
+    { id: 'merong', img: merong },
+    { id: 'sadness', img: sadness },
+    { id: 'sunglasses', img: sunglasses },
+    { id: 'glasses', img: glasses },
+    { id: 'Tears', img: Tears },
+    { id: 'Angry', img: Angry },
+    { id: 'Ribbon', img: Ribbon },
+    { id: 'angel', img: angel },
+    { id: 'Devil', img: Devil },
+    { id: 'cloud', img: cloud },
+    { id: 'Wings', img: Wings },
+    { id: 'Nakutomaki', img: Nakutomaki },
+    { id: 'ice_cream', img: ice_cream },
+    { id: 'crown', img: crown },
+    { id: 'clover', img: clover },
+    { id: 'Twinkle', img: Twinkle },
+    { id: 'Black', img: Black },
+    { id: 'White', img: White },
   ];
 
-  const spawnSticker = (img) => {
-    const newId = Date.now();
-    setStickers([...stickers, { id: newId, img, width: 120, height: 120, rotate: 0, x: 0, y: 0 }]);
-    setTopStickerId(newId);
-  };
+  // 👇 1. 자동으로 다음 페이지로 넘어가게 하는 효과 추가
+  useEffect(() => {
+    if (timeLeft === 0) {
+      onNext(); // 시간이 0이 되면 부모가 내려준 넘어가기 함수 실행
+    }
+  }, [timeLeft, onNext]);
 
+  const spawnSticker = (imgSrc) => {
+    const newId = Date.now();
+    
+    // 1. 가상의 이미지 객체를 생성해 원본 크기 구하기
+    const img = new Image();
+    img.src = imgSrc;
+    
+    img.onload = () => {
+      const originalWidth = img.width;
+      const originalHeight = img.height;
+      const aspectRatio = originalWidth / originalHeight;
+
+      // 2. 기본 기준 크기(가로 120px)를 잡고, 세로는 비율에 맞게 자동 계산
+      const defaultWidth = 120;
+      const defaultHeight = defaultWidth / aspectRatio;
+
+      // 3. 비율이 유지된 크기로 스티커 추가
+      setStickers((prev) => [
+        ...prev,
+        { 
+          id: newId, 
+          img: imgSrc, 
+          width: defaultWidth, 
+          height: defaultHeight, 
+          rotate: 0, 
+          x: 0, 
+          y: 0 
+        }
+      ]);
+      setTopStickerId(newId);
+    };
+  };
+  
   const handleStop = (id, data) => {
     setStickers((prev) =>
       prev.map((s) => (s.id === id ? { ...s, x: data.x, y: data.y } : s))
@@ -95,7 +192,8 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, onNext
 
   return (
     <div className="decorate-page" onClick={() => setTopStickerId(null)}>
-      <div className="decorate-timer-wrap">
+      {/* 👇 2. 타이머 클릭 시 부모 클릭 이벤트 방지(stopPropagation) 추가 */}
+      <div className="decorate-timer-wrap" onClick={(e) => e.stopPropagation()}>
         <img src={timer90} alt="" className="decorate-timer-image" />
         <span className="decorate-timer-text">{timeLeft}</span>
       </div>

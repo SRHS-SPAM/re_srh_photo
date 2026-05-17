@@ -2,6 +2,9 @@ App.css
 * {
   box-sizing: border-box;
 }
+body {
+  background-color: #ffebd2 !important;
+}
 
 /* ======================
    FONT
@@ -675,8 +678,10 @@ img {
   background-color: #666;
   position: absolute;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+
   top: 0;
   right: 0;
   width: 47%;
@@ -867,10 +872,16 @@ img {
   display: block;
 }
 
+/* 오른쪽 영역 전체를 세로 중앙 정렬 */
 .final-right {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column;   /* 내부 요소들을 위에서 아래로 나열 */
+  justify-content: center;  /* 수직 중앙 정렬 */
+  align-items: center;      /* 수평 중앙 정렬 */
+  gap: 24px;                /* QR카드와 버튼들 사이의 간격 (원하는 대로 조절) */
+  width: 100%;              /* 부모 레이아웃에 맞춰 너비 지정 */
+  /* background-color: turquoise; */
+  /* width: 478px; */
 }
 
 .final-qr-card {
@@ -900,6 +911,49 @@ img {
   color: #111;
 }
 
+
+/* 두 버튼을 가로로 나란히 배치하는 컨테이너 */
+.button-group {
+  display: flex;
+  flex-direction: row;      /* 가로로 나열 */
+  justify-content: center;  /* 가운데 정렬 */
+  /* background-color: tomato; */
+  align-items: center;      /* 높이(수직) 맞추기 */
+  gap: 16px;                /* 버튼과 버튼 사이의 간격 */
+  width: 100%;
+}
+
+/* 버튼 공통 스타일 수정 (기존 스타일에 맞춰 적용하세요) */
+.final-button, .final-print-button {
+  margin-top: 34px;
+  /* margin: 34px 10px 0; */
+  position: relative;
+  /* left: -30px; */
+  border: none;
+  background: #666;
+  color: #fff;
+  font-size: 28px;
+  padding: 18px 34px;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.22);
+}
+
+/* 
+
+.final-button {
+  margin-top: 34px;
+  position: relative;
+  left: -30px;
+  border: none;
+  background: #666;
+  color: #fff;
+  font-size: 28px;
+  padding: 18px 34px;
+  border-radius: 16px;
+  cursor: pointer;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.22);
+}
 .final-print-button {
   margin-top: 34px;
   position: relative;
@@ -912,4 +966,4 @@ img {
   border-radius: 16px;
   cursor: pointer;
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.22);
-}
+} */

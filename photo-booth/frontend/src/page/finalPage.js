@@ -43,13 +43,19 @@ export default function FinalPage({ finalFrame, stickers, onReset }) {
             <div className="final-qr-box">QR</div>
           </div>
 
-          <button className="final-reset-button" onClick={onReset}>
+          {/* <button className="final-button" onClick={onReset}>
               처음으로
           </button>
 
           <button className="final-print-button">
-            출력하기 &gt;
-          </button>
+            출력하기
+          </button> */}
+
+          {/* 두 버튼을 감싸는 새로운 컨테이너 추가 */}
+          <div className="button-group">
+            <button className="final-button" onClick={onReset}>처음으로</button>
+            <button className="final-print-button">출력하기</button>
+          </div>
         </div>
       </div>
     </div>

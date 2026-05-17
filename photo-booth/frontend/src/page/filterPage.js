@@ -7,7 +7,7 @@ import filterSunset from "../assets/filter_sunset.png";
 import filterCool from "../assets/filter_cool.png";
 import filterBw from "../assets/filter_bw.png";
 
-import { useState } from "react";
+import { useState, useEffect } from "react"; // 👈 useEffect 추가
 
 const FILTER_ITEMS = [
   { id: "normal", label: "일반", image: filterNormal },
@@ -21,11 +21,30 @@ const FILTER_ITEMS = [
 export default function FilterPage({
   stickers,
   finalFrame,
-  onNext,
-  timeLeft
+  onNext
+  // 👈 부모에게서 받는 props 중 기존 timeLeft는 내부 타이머를 쓸 것이므로 제외하거나 무시해도 됩니다.
 }) {
 
   const [selectedFilter, setSelectedFilter] = useState("normal");
+  // 🛠️ 1. 필터 페이지 전용 로컬 타이머 상태 추가 (초기값 90초)
+  const [localTime, setLocalTime] = useState(90);
+
+  // 🛠️ 2. 컴포넌트가 마운트(시작)될 때 1초마다 숫자를 줄이는 타이머 가동
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLocalTime((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval); // 0초가 되면 타이머를 멈추고
+          onNext();               // 자동으로 다음 페이지로 이동
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    // 사용자가 '넘어가기'를 직접 누르는 등 페이지를 벗어날 때 타이머를 메모리에서 깨끗이 제거
+    return () => clearInterval(interval);
+  }, [onNext]);
 
   function getFilterStyle(filter) {
     switch (filter) {
@@ -59,8 +78,9 @@ export default function FilterPage({
           className="filter-timer-image"
         />
 
+        {/* 🛠️ 3. 외부 props 대신 독립적으로 돌아가는 localTime을 렌더링 */}
         <span className="filter-timer-text">
-          {timeLeft}
+          {localTime}
         </span>
       </div>
 

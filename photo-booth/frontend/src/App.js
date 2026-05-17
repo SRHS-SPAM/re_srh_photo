@@ -13,7 +13,8 @@ import FinalPage from "./page/finalPage";
 import frame1 from "./assets/frame1.png";
 
 export default function App() {
-  const [page, setPage] = useState("intro");
+  const [page, setPage] = useState("decorate");
+  // const [page, setPage] = useState("intro");
   const [selectedFrame, setSelectedFrame] = useState(frame1);
   const [photos, setPhotos] = useState([]);
   const [timeLeft, setTimeLeft] = useState(90);
