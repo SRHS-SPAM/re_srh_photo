@@ -90,6 +90,7 @@ export default function App() {
   if (page === "result") {
     return (
       <ResultPage
+        onReset={resetProject}
         finalFrame={selectedFrame}
         photos={photos}
         onDecorate={() => {

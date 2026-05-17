@@ -2,7 +2,7 @@ import '../App.css';
 import bubble from "../assets/bubble.png";
 import qrBox from "../assets/qr_box.png";
 
-export default function ResultPage({ finalFrame, photos, onDecorate }) {
+export default function ResultPage({ finalFrame, photos, onDecorate, onReset }) {
   return (
     <div className="result-app">
       <div className="result-screen">
@@ -51,9 +51,13 @@ export default function ResultPage({ finalFrame, photos, onDecorate }) {
             </div>
           </div>
 
-          <button className="common-button print-button">
-            출력하기 &gt;
-          </button>
+          <div className="button-group">
+            <button className="final-button" onClick={onReset}>처음으로</button>
+            <button className="final-print-button">출력하기</button>
+          </div>
+          {/* <button className="common-button print-button">
+            출력하기
+          </button> */}
         </div>
       </div>
     </div>
