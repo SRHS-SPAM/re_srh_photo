@@ -77,6 +77,10 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
 
         const ctx = canvas.getContext("2d");
 
+        // 좌우반전
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+
         const scale = Math.max(
           canvas.width / img.width,
           canvas.height / img.height

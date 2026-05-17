@@ -7,7 +7,7 @@ import filterSunset from "../assets/filter_sunset.png";
 import filterCool from "../assets/filter_cool.png";
 import filterBw from "../assets/filter_bw.png";
 
-import { useState, useEffect } from "react"; // 👈 useEffect 추가
+import { useState, useEffect } from "react";
 
 const FILTER_ITEMS = [
   { id: "normal", label: "일반", image: filterNormal },
@@ -21,11 +21,11 @@ const FILTER_ITEMS = [
 export default function FilterPage({
   stickers,
   finalFrame,
-  onNext
-  // 👈 부모에게서 받는 props 중 기존 timeLeft는 내부 타이머를 쓸 것이므로 제외하거나 무시해도 됩니다.
+  photos,
+  selectedFilter,
+  setSelectedFilter,
+  onNext,
 }) {
-
-  const [selectedFilter, setSelectedFilter] = useState("normal");
   // 🛠️ 1. 필터 페이지 전용 로컬 타이머 상태 추가 (초기값 90초)
   const [localTime, setLocalTime] = useState(90);
 
@@ -89,16 +89,62 @@ export default function FilterPage({
         <div
           style={{
             position: 'relative',
-            display: 'inline-block'
+            display: 'inline-block',
+            width: '520px',
           }}
         >
+          {/* 컨테이너 높이 확보용 (투명) */}
           <img
             src={finalFrame}
             alt=""
-            className="filter-main-frame-image"
-            style={getFilterStyle(selectedFilter)}
+            style={{ width: '100%', display: 'block', visibility: 'hidden' }}
           />
 
+          {/* 사진 2x2 그리드 - 필터 여기에만 적용 */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '6%',
+              left: '5%',
+              right: '5%',
+              bottom: '21%',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gridTemplateRows: '1fr 1fr',
+              ...getFilterStyle(selectedFilter),
+            }}
+          >
+            {photos && photos.map((photo, i) => (
+              <img
+                key={i}
+                src={photo}
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* 프레임 오버레이 - 필터 없음 */}
+          <img
+            src={finalFrame}
+            alt=""
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              pointerEvents: 'none',
+              zIndex: 2,
+            }}
+          />
+
+          {/* 스티커 */}
           {stickers && stickers.map((s) => (
             <div
               key={s.id}
@@ -114,7 +160,7 @@ export default function FilterPage({
                 transform: `rotate(${s.rotate}deg)`,
                 zIndex: 999,
                 pointerEvents: 'none',
-                display: 'block'
+                display: 'block',
               }}
             />
           ))}

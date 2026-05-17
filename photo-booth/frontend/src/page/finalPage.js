@@ -1,22 +1,48 @@
 import '../App.css';
 
-// stickers 프롭스를 추가로 받습니다.
-export default function FinalPage({ finalFrame, stickers, onReset }) {
+function getFilterStyle(filter) {
+  switch (filter) {
+    case "soft":    return { filter: "brightness(1.1) blur(1px)" };
+    case "warm":    return { filter: "sepia(0.4) saturate(1.2)" };
+    case "sunset":  return { filter: "hue-rotate(-20deg) saturate(1.5)" };
+    case "cool":    return { filter: "hue-rotate(180deg) brightness(0.9)" };
+    case "bw":      return { filter: "grayscale(1)" };
+    default:        return { filter: "none" };
+  }
+}
+
+export default function FinalPage({ finalFrame, photos, stickers, selectedFilter, onReset }) {
   return (
     <div className="final-page">
       <div className="final-layout">
         <div className="final-left">
-          {/* 스티커를 프레임 위에 겹치기 위해 relative 컨테이너가 필요합니다 */}
-          <div className="final-frame-container" style={{ position: 'relative', display: 'inline-block' }}>
-            <img src={finalFrame} alt="완성된 프레임" className="decorate-frame-image" />
+          <div className="final-frame-container" style={{ position: 'relative', display: 'inline-block', width: '520px' }}>
+            {/* 높이 확보용 */}
+            <img src={finalFrame} alt="완성된 프레임" className="decorate-frame-image" style={{ visibility: 'hidden' }} />
 
-            {/* 스티커 리스트를 맵핑하여 렌더링 */}
+            {/* 사진 2x2 그리드 */}
+            <div style={{
+              position: 'absolute',
+              top: '6%', left: '5%', right: '5%', bottom: '21%',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gridTemplateRows: '1fr 1fr',
+              ...getFilterStyle(selectedFilter),
+            }}>
+              {photos && photos.map((photo, i) => (
+                <img key={i} src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+              ))}
+            </div>
+
+            {/* 프레임 오버레이 */}
+            <img src={finalFrame} alt="완성된 프레임" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} />
+
+            {/* 스티커 */}
             {stickers && stickers.map((sticker) => (
               <div
                 key={sticker.id}
                 style={{
                   position: 'absolute',
-                  // DecoratePage와 동일한 기준점(top: 100, left: 100)과 좌표(x, y) 적용
                   top: `calc(100px + ${sticker.y}px)`,
                   left: `calc(100px + ${sticker.x}px)`,
                   width: sticker.width,
@@ -25,8 +51,8 @@ export default function FinalPage({ finalFrame, stickers, onReset }) {
                   backgroundSize: '100% 100%',
                   backgroundRepeat: 'no-repeat',
                   transform: `rotate(${sticker.rotate}deg)`,
-                  pointerEvents: 'none', // 마지막 페이지니까 클릭 안 되게 막음
-                  zIndex: 10,
+                  pointerEvents: 'none',
+                  zIndex: 999,
                 }}
               />
             ))}

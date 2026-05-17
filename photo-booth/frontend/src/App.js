@@ -13,11 +13,12 @@ import FinalPage from "./page/finalPage";
 import frame1 from "./assets/frame1.png";
 
 export default function App() {
-  const [page, setPage] = useState("decorate");
-  // const [page, setPage] = useState("intro");
+  const [page, setPage] = useState("intro");
   const [selectedFrame, setSelectedFrame] = useState(frame1);
   const [photos, setPhotos] = useState([]);
   const [timeLeft, setTimeLeft] = useState(90);
+
+  const [selectedFilter, setSelectedFilter] = useState("normal");
 
   const [stickers, setStickers] = useState(() => {
     try {
@@ -52,6 +53,7 @@ export default function App() {
     setStickers([]);
     localStorage.removeItem("photo-stickers");
     setSelectedFrame(frame1);
+    setSelectedFilter("normal");
     setTimeLeft(90);
     setPage("intro");
   };
@@ -121,6 +123,8 @@ export default function App() {
         finalFrame={selectedFrame}
         photos={photos}
         stickers={stickers}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
         onNext={() => setPage("final")}
         timeLeft={timeLeft}
       />
@@ -133,6 +137,7 @@ export default function App() {
         finalFrame={selectedFrame}
         photos={photos}
         stickers={stickers}
+        selectedFilter={selectedFilter}
         onReset={resetProject}
       />
     );

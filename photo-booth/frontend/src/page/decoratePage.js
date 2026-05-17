@@ -43,7 +43,7 @@ import Twinkle from "../assets/stickers/Twinkle.png";
 import Black from "../assets/stickers/Black_logo.png";
 import White from "../assets/stickers/White_logo.png";
 
-export default function DecoratePage({ stickers, setStickers, finalFrame, onNext, timeLeft }) {
+export default function DecoratePage({ stickers, setStickers, finalFrame, photos, onNext, timeLeft }) {
   const [topStickerId, setTopStickerId] = useState(null);
   const nodeRefs = useRef({});
 
@@ -209,9 +209,26 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, onNext
 
         <div
           className="decorate-frame-container"
-          style={{ position: 'relative', display: 'inline-block' }}
+          style={{ position: 'relative', display: 'inline-block', width: '520px' }}
         >
-          <img src={finalFrame} alt="frame" className="decorate-frame-image" />
+          {/* 높이 확보용 */}
+          <img src={finalFrame} alt="frame" className="decorate-frame-image" style={{ visibility: 'hidden' }} />
+
+          {/* 사진 2x2 그리드 */}
+          <div style={{
+            position: 'absolute',
+            top: '6%', left: '5%', right: '5%', bottom: '21%',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            gridTemplateRows: '1fr 1fr',
+          }}>
+            {photos && photos.map((photo, i) => (
+              <img key={i} src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+            ))}
+          </div>
+
+          {/* 프레임 오버레이 */}
+          <img src={finalFrame} alt="frame" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', zIndex: 2 }} />
 
           {stickers.map((sticker) => {
             if (!nodeRefs.current[sticker.id]) {
