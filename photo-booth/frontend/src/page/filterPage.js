@@ -154,13 +154,14 @@ export default function FilterPage({
                 top: `${100 + s.y}px`,
                 width: `${s.width}px`,
                 height: `${s.height}px`,
-                backgroundImage: `url(${s.img})`,
+                backgroundImage: `url("${s.img}")`,
                 backgroundSize: '100% 100%',
                 backgroundRepeat: 'no-repeat',
                 transform: `rotate(${s.rotate}deg)`,
                 zIndex: 999,
                 pointerEvents: 'none',
                 display: 'block',
+                opacity: s.id.toString().includes('star') || (typeof s.img === 'string' && s.img.includes('Star')) ? 0.3 : 1,
               }}
             />
           ))}

@@ -47,12 +47,13 @@ export default function FinalPage({ finalFrame, photos, stickers, selectedFilter
                   left: `calc(100px + ${sticker.x}px)`,
                   width: sticker.width,
                   height: sticker.height,
-                  backgroundImage: `url(${sticker.img})`,
+                  backgroundImage: `url("${sticker.img}")`,
                   backgroundSize: '100% 100%',
                   backgroundRepeat: 'no-repeat',
                   transform: `rotate(${sticker.rotate}deg)`,
                   pointerEvents: 'none',
                   zIndex: 999,
+                  opacity: sticker.id.toString().includes('star') || (typeof sticker.img === 'string' && sticker.img.includes('Star')) ? 0.3 : 1,
                 }}
               />
             ))}

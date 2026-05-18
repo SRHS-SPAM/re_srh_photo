@@ -264,11 +264,12 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
                     style={{
                       width: '100%',
                       height: '100%',
-                      backgroundImage: `url(${sticker.img})`,
+                      backgroundImage: `url("${sticker.img}")`,
                       backgroundSize: '100% 100%',
                       backgroundRepeat: 'no-repeat',
                       transform: `rotate(${sticker.rotate}deg)`,
                       outline: isSelected ? '2px dashed #4dabf7' : 'none',
+                      opacity: sticker.id.toString().includes('star') || (typeof sticker.img === 'string' && sticker.img.includes('Star')) ? 0.3 : 1,
                     }}
                     onClick={(e) => e.stopPropagation()}
                   >
