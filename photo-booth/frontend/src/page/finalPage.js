@@ -1,4 +1,5 @@
 import '../App.css';
+import { getPhotoGridStyle, getPhotoScale } from '../frameConfig';
 
 function getFilterStyle(filter) {
   switch (filter) {
@@ -11,7 +12,7 @@ function getFilterStyle(filter) {
   }
 }
 
-export default function FinalPage({ finalFrame, photos, stickers, selectedFilter, onReset }) {
+export default function FinalPage({ finalFrame, photos, photoOffsets, stickers, selectedFilter, onReset }) {
   return (
     <div className="final-page">
       <div className="final-layout">
@@ -20,17 +21,9 @@ export default function FinalPage({ finalFrame, photos, stickers, selectedFilter
             {/* 높이 확보용 */}
             <img src={finalFrame} alt="완성된 프레임" className="decorate-frame-image" style={{ visibility: 'hidden' }} />
 
-            {/* 사진 2x2 그리드 */}
-            <div style={{
-              position: 'absolute',
-              top: '6%', left: '5%', right: '5%', bottom: '21%',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gridTemplateRows: '1fr 1fr',
-              ...getFilterStyle(selectedFilter),
-            }}>
+            <div style={getPhotoGridStyle(finalFrame, getFilterStyle(selectedFilter))}>
               {photos && photos.map((photo, i) => (
-                <img key={i} src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img key={i} src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: `translate(${photoOffsets?.[i]?.x || 0}px, ${photoOffsets?.[i]?.y || 0}px) scale(${getPhotoScale(finalFrame)})` }} />
               ))}
             </div>
 

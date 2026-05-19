@@ -11,6 +11,7 @@ import FilterPage from "./page/filterPage";
 import FinalPage from "./page/finalPage";
 
 import frame1 from "./assets/frame1.png";
+import { getDefaultPhotoOffsets } from "./frameConfig";
 
 export default function App() {
   // const [page, setPage] = useState("decorate");
@@ -20,6 +21,7 @@ export default function App() {
   const [timeLeft, setTimeLeft] = useState(90);
 
   const [selectedFilter, setSelectedFilter] = useState("normal");
+  const [photoOffsets, setPhotoOffsets] = useState(() => getDefaultPhotoOffsets(frame1));
 
   const [stickers, setStickers] = useState(() => {
     try {
@@ -55,6 +57,7 @@ export default function App() {
     localStorage.removeItem("photo-stickers");
     setSelectedFrame(frame1);
     setSelectedFilter("normal");
+    setPhotoOffsets(getDefaultPhotoOffsets(frame1));
     setTimeLeft(90);
     setPage("intro");
   };
@@ -71,8 +74,14 @@ export default function App() {
     return (
       <FramePage
         selectedFrame={selectedFrame}
-        setSelectedFrame={setSelectedFrame}
-        onNext={() => setPage("shoot")}
+        setSelectedFrame={(frame) => {
+          setSelectedFrame(frame);
+          setPhotoOffsets(getDefaultPhotoOffsets(frame));
+        }}
+        onNext={() => {
+          setPhotoOffsets(getDefaultPhotoOffsets(selectedFrame));
+          setPage("shoot");
+        }}
       />
     );
   }
@@ -94,6 +103,8 @@ export default function App() {
         onReset={resetProject}
         finalFrame={selectedFrame}
         photos={photos}
+        photoOffsets={photoOffsets}
+        setPhotoOffsets={setPhotoOffsets}
         onDecorate={() => {
           setTimeLeft(90);
           setPage("decorate");
@@ -111,6 +122,7 @@ export default function App() {
       <DecoratePage
         finalFrame={selectedFrame}
         photos={photos}
+        photoOffsets={photoOffsets}
         stickers={stickers}
         setStickers={setStickers}
         onNext={() => setPage("filter")}
@@ -124,6 +136,7 @@ export default function App() {
       <FilterPage
         finalFrame={selectedFrame}
         photos={photos}
+        photoOffsets={photoOffsets}
         stickers={stickers}
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
@@ -138,6 +151,7 @@ export default function App() {
       <FinalPage
         finalFrame={selectedFrame}
         photos={photos}
+        photoOffsets={photoOffsets}
         stickers={stickers}
         selectedFilter={selectedFilter}
         onReset={resetProject}

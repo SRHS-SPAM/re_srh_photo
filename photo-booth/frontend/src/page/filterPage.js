@@ -1,4 +1,5 @@
 import '../App.css';
+import { getPhotoGridStyle, getPhotoScale } from '../frameConfig';
 import timer90 from "../assets/timer_90.png";
 import filterNormal from "../assets/filter_normal.png";
 import filterSoft from "../assets/filter_soft.png";
@@ -22,6 +23,7 @@ export default function FilterPage({
   stickers,
   finalFrame,
   photos,
+  photoOffsets,
   selectedFilter,
   setSelectedFilter,
   onNext,
@@ -100,32 +102,9 @@ export default function FilterPage({
             style={{ width: '100%', display: 'block', visibility: 'hidden' }}
           />
 
-          {/* 사진 2x2 그리드 - 필터 여기에만 적용 */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '6%',
-              left: '5%',
-              right: '5%',
-              bottom: '21%',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gridTemplateRows: '1fr 1fr',
-              ...getFilterStyle(selectedFilter),
-            }}
-          >
+          <div style={getPhotoGridStyle(finalFrame, getFilterStyle(selectedFilter))}>
             {photos && photos.map((photo, i) => (
-              <img
-                key={i}
-                src={photo}
-                alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
-              />
+              <img key={i} src={photo} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transform: `translate(${photoOffsets?.[i]?.x || 0}px, ${photoOffsets?.[i]?.y || 0}px) scale(${getPhotoScale(finalFrame)})` }} />
             ))}
           </div>
 
