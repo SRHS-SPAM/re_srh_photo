@@ -1,7 +1,8 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import Webcam from "react-webcam";
 import "./WebcamCapture.css";
 import shutterCircle from "../assets/shutter_circle.png";
+import mp3Sound from "../assets/mp3.mp3";
 
 const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
   const webcamRef = useRef(null);
@@ -11,6 +12,9 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [videoDevices, setVideoDevices] = useState([]);
   const [selectedDeviceId, setSelectedDeviceId] = useState("");
+
+  // 오디오 객체를 미리 생성하여 지연 시간 방지
+  const audio = useMemo(() => new Audio(mp3Sound), []);
 
   const getVideoDevices = useCallback(async () => {
     try {
@@ -22,7 +26,6 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
       );
 
       setVideoDevices(videoInputs);
-      console.log("감지된 카메라 목록:", videoInputs);
 
       if (videoInputs.length >= 3) {
         setSelectedDeviceId(videoInputs[2].deviceId);
@@ -36,21 +39,16 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
 
   useEffect(() => {
     getVideoDevices();
-
     navigator.mediaDevices.addEventListener("devicechange", getVideoDevices);
-
     return () => {
-      navigator.mediaDevices.removeEventListener(
-        "devicechange",
-        getVideoDevices
-      );
+      navigator.mediaDevices.removeEventListener("devicechange", getVideoDevices);
     };
   }, [getVideoDevices]);
 
-  const playSound = () => {
-    const audio = new Audio("./mp3.mp3");
-    audio.play().catch(() => console.log("오디오 재생 실패"));
-  };
+  const playSound = useCallback(() => {
+    audio.currentTime = 0; // 재생 위치 초기화
+    audio.play().catch((err) => console.log("오디오 재생 실패:", err));
+  }, [audio]);
 
   const handleAddPhoto = useCallback(
     (imageSrc) => {
@@ -76,8 +74,6 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
         canvas.height = 2560;
 
         const ctx = canvas.getContext("2d");
-
-        // 좌우반전
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
 
@@ -90,7 +86,6 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
         const y = canvas.height / 2 - (img.height / 2) * scale;
 
         ctx.drawImage(img, x, y, img.width * scale, img.height * scale);
-
         resolve(canvas.toDataURL("image/jpeg", 1.0));
       };
     });
@@ -98,7 +93,6 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
 
   const capture = () => {
     if (photoCount >= 4 || capturing) return;
-
     setCapturing(true);
     setCountdown(5);
     setPhotoIndex(0);
@@ -109,6 +103,10 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
 
     if (capturing && countdown > 0) {
       timer = setTimeout(() => {
+        // 카운트다운이 1에서 0으로 넘어가는 시점에 미리 소리를 실행하여 딜레이 제거
+        if (countdown === 1) {
+          playSound();
+        }
         setCountdown(countdown - 1);
       }, 1000);
     } else if (
@@ -118,14 +116,12 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
       !isProcessing
     ) {
       setIsProcessing(true);
-
+      
       const imageSrc = webcamRef.current?.getScreenshot();
 
       if (imageSrc) {
         cropImage(imageSrc).then((croppedImage) => {
           handleAddPhoto(croppedImage);
-          playSound();
-
           setPhotoIndex((prev) => prev + 1);
           setCountdown(5);
           setIsProcessing(false);
@@ -147,16 +143,11 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
     photoIndex,
     photoCount,
     isProcessing,
+    playSound
   ]);
 
   return (
     <div className="webcam-container">
-      <img
-        // src={`${process.env.PUBLIC_URL}/camera-frame.png`}
-        // className="camera-frame"
-        // alt="카메라 프레임"
-      />
-
       {selectedDeviceId ? (
         <Webcam
           audio={false}
@@ -168,7 +159,6 @@ const WebcamCapture = ({ addPhoto, photoCount, clearPhoto, onComplete }) => {
             height: 1280,
           }}
           className="webcam"
-          onUserMedia={() => console.log("✅ 카메라 연결 성공")}
         />
       ) : (
         <div className="webcam-loading">카메라를 찾는 중...</div>

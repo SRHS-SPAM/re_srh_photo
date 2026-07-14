@@ -133,7 +133,8 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
 
   const handleRotate = (id, e) => {
     e.stopPropagation();
-    e.preventDefault();
+    // pointerdown에서 preventDefault를 호출하면 포커스 등 브라우저 기본 동작이 방지될 수 있으나, 
+    // 터치 환경에서는 스크롤 방지를 위해 touch-action: none이 더 중요합니다.
 
     const targetRef = nodeRefs.current[id].current;
     if (!targetRef) return;
@@ -142,7 +143,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    const onMouseMove = (moveEvent) => {
+    const onPointerMove = (moveEvent) => {
       const angle = Math.atan2(moveEvent.clientY - centerY, moveEvent.clientX - centerX);
       const degree = angle * (180 / Math.PI);
       setStickers((prev) =>
@@ -150,18 +151,17 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
       );
     };
 
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+    const onPointerUp = () => {
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
   };
 
   const handleResize = (id, e) => {
     e.stopPropagation();
-    e.preventDefault();
 
     const startX = e.clientX;
     const targetSticker = stickers.find((s) => s.id === id);
@@ -170,7 +170,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
     const startWidth = targetSticker.width;
     const aspect = targetSticker.width / targetSticker.height;
 
-    const onMouseMove = (moveEvent) => {
+    const onPointerMove = (moveEvent) => {
       const newWidth = Math.max(40, startWidth + (moveEvent.clientX - startX));
 
       setStickers((prev) =>
@@ -182,13 +182,13 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
       );
     };
 
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+    const onPointerUp = () => {
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', onPointerUp);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', onPointerUp);
   };
 
   return (
@@ -293,7 +293,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
 
                         <div
                           className="action-btn"
-                          onMouseDown={(e) => handleRotate(sticker.id, e)}
+                          onPointerDown={(e) => handleRotate(sticker.id, e)}
                           style={{
                             position: 'absolute',
                             top: -15,
@@ -308,6 +308,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
                             justifyContent: 'center',
                             color: 'white',
                             border: '2px solid white',
+                            touchAction: 'none',
                           }}
                         >
                           🔄
@@ -315,7 +316,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
 
                         <div
                           className="action-btn"
-                          onMouseDown={(e) => handleResize(sticker.id, e)}
+                          onPointerDown={(e) => handleResize(sticker.id, e)}
                           style={{
                             position: 'absolute',
                             bottom: -10,
@@ -326,6 +327,7 @@ export default function DecoratePage({ stickers, setStickers, finalFrame, photos
                             border: '2px solid white',
                             borderRadius: '50%',
                             cursor: 'nwse-resize',
+                            touchAction: 'none',
                           }}
                         />
                       </>
