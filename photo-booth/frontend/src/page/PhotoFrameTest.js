@@ -160,16 +160,13 @@ const PhotoFrameTest = ({ photos, frameType, onBack, title = "인생네컷" }) =
     formData.append('image', blob, fileName)
     
     // ⭐⭐ 수정된 부분: 환경 변수를 사용하여 API 기본 URL 설정 ⭐⭐
-    const apiBaseUrl = process.env.REACT_APP_API_URL || // 1. Cloud Run 배포 시 주입된 환경 변수 사용
-        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:8000' // 2. 로컬 개발 환경일 때만 localhost 사용
-            : `https://${window.location.hostname}`); // 3. 환경 변수 없으면 현재 호스트 기반으로 추정
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://10.125.93.230:8000';
 
     console.log("현재 호스트:", window.location.hostname);
     console.log("사용할 API 기본 URL:", apiBaseUrl);
 
-    // apiUrl 구성 시 'api/upload/' 경로 추가
-    const apiUrl = `${apiBaseUrl}/api/upload/`;
+    // apiUrl 구성 시 'api/photos/upload/' 경로 추가
+    const apiUrl = `${apiBaseUrl}/api/photos/upload/`;
     console.log("최종 API URL:", apiUrl);
     // 서버에 이미지 업로드
     console.log("요청 전송 중...");
